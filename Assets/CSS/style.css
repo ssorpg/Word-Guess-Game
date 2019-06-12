@@ -1,0 +1,9 @@
+#game-div {
+    margin-top: 10%;
+    padding: 1%;
+    background-color: lightgrey;
+}
+p {
+    padding: 10px;
+    padding-left: 0;
+}

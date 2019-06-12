@@ -1,3 +1,15 @@
+// DEFINE VARIABLES
+// ===================================================
+
+
+// DEFIne functions
+// ===================================================
+
+
+// METHODS
+// ===================================================
+
+
 var newGame;
 
 class Game {
@@ -15,7 +27,7 @@ class Game {
     addKey(key) { // Add guessed letters
         if (this.validLetters.indexOf(key) !== -1 && this.lettersPressed.indexOf(key) === -1) { // Valid letter and not found
             this.lettersPressed.push(key);
-            this.lettersPressed.sort();
+            // this.lettersPressed.sort(); // Doesn't look as good when it's sorted
             this.advanceCurrentProgress(key);
             return;
         }
@@ -27,10 +39,27 @@ class Game {
         this.currentWord = this.possibleWords[Math.floor(Math.random() * Math.floor(this.possibleWords.length))];
     }
     advanceCurrentProgress(key) {
-        if (this.currentWord.indexOf(key) !== -1) {
-            this.currentProgress[this.currentWord.indexOf(key)] = key; // Replace the position of the underscore with a letter when its found
+        let keyPositions = [];
+
+        for (let i = 0; i < this.currentWord.length; i++) {
+            if (this.currentWord[i] === key) {
+                keyPositions.push(this.currentWord[i]);
+            }
+            else {
+                keyPositions.push('');
+            }
         }
-        this.guessesRemaining--;
+
+        if (keyPositions.indexOf(key) !== -1) {
+            for (let i = 0; i < keyPositions.length; i++) { // Fix for if there are multiple of the same letter in the word
+                if (this.currentWord[i] === keyPositions[i]) {
+                    this.currentProgress[i] = key; // Replace the position of the underscore with a letter when its found
+                }
+            }
+        }
+        else {
+            this.guessesRemaining--;
+        }
         this.checkGameStatus();
     }
     checkGameStatus() {
@@ -48,10 +77,10 @@ class Game {
 }
 
 function main() {
-    let gamePaused = 0; // Default game is not paused
+    let gamePaused = 0; // Default is game is not paused
     let lettersPressed = [];
     let validLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-    let possibleWords = ['boulder', 'fred', 'wilma', 'barney', 'caveman'];
+    let possibleWords = ['boulder', 'fred', 'wilma', 'barney', 'caveman', 'stone', 'bedrock', 'flintstones'];
     let currentWord;
     let currentProgress = [];
     let guessesRemaining = 12;
@@ -67,6 +96,7 @@ function initializeGame(newGame) {
     document.getElementById("startGame").textContent = "Restart";
     document.getElementById("endGame").textContent = "";
     newGame.selectWord();
+    console.log(newGame.currentWord);
 
     for (let char = 0; char < newGame.currentWord.length; char++) {
         newGame.currentProgress.push('_'); // Blank spaces for currentWord
@@ -87,13 +117,16 @@ function keyPressed(event, newGame) {
 }
 
 function updatePage() {
-    document.getElementById("lettersPressed").textContent = removeCommas(newGame.lettersPressed, "space");
-    document.getElementById("currentProgress").textContent = removeCommas(newGame.currentProgress, "space");
-    document.getElementById("guessesRemaining").textContent = newGame.guessesRemaining;
+    document.getElementById("lettersPressed").textContent = "Letters Guessed: " + removeCommas(newGame.lettersPressed, true);
+    document.getElementById("currentProgress").textContent = "Word to Guess: " + removeCommas(newGame.currentProgress, true);
+    document.getElementById("guessesRemaining").textContent = "Guesses Remaining: " + newGame.guessesRemaining;
 }
 
 function removeCommas(array, addSpace) {
-    if (addSpace === "space") {
+    if (!Array.isArray(array)) {
+        return array;
+    }
+    else if (addSpace) {
         return array.join().replace(/,/g, ' ');
     }
     else {
