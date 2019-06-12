@@ -12,14 +12,29 @@
 </head>
 
 <body onkeyup="keyPressed(event, newGame)">
-  <div class="container" id="game-div">
-    <div class="row justify-content-center">
+  <div class="jumbotron jumbo-mod">
+    <img src="Assets/Images/flintstones.jpg">
+    <hr class="my-4">
+    <div class="row">
       <div class="col-6">
-        <button type="button" class="btn btn-primary btn-lg" id="startGame" onclick="main()">Start the Game!</button>
+        <h1 class="display-4 h1-mod">Flintstones Word Guess!</h1>
+        <p class="lead">Click 'Start the game!' and press letters on your keyboard to guess the word.</p>
+      </div>
+      <div class="col-6">
+        <div class="row">
+          <div class="col-6">
+            <button type="button" class="btn btn-primary btn-lg" id="startGame" onclick="main()">Start the
+              Game!</button>
+          </div>
+          <div class="col-4">
+            <div id="endGame"></div>
+          </div>
+        </div>
+        <p></p>
         <p id="lettersPressed"></p>
         <p id="currentProgress"></p>
         <p id="guessesRemaining"></p>
-        <p id="endGame"></p>
+        <p><span id="wins"></span><span id="losses"></span></p>
       </div>
     </div>
   </div>

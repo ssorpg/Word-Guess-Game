@@ -1,9 +1,45 @@
-#game-div {
-    margin-top: 10%;
-    padding: 1%;
-    background-color: lightgrey;
+@font-face {
+    font-family: "Chiseled";
+    src: url("../Fonts/Chiseled.ttf");
+}
+html, body {
+    height: 100%;
+}
+.jumbo-mod {
+    min-height: 100%;
+    margin: 0;
+    padding-top: 16px;
+    padding-bottom: 0;
+}
+.jumbo-mod img {
+    width: 70%;
+    height: 300px;
+    margin: auto;
+    display: block;
+}
+@media screen and (max-width: 1000px) {
+    .jumbo-mod img {
+        width: 85%;
+    }
+}
+@media screen and (max-width: 700px) {
+    .jumbo-mod img {
+        width: 100%;
+    }
+}
+.h1-mod {
+    font-family: 'Chiseled';
+    font-size: calc( 10px + 4vw );
 }
 p {
     padding: 10px;
     padding-left: 0;
+}
+@media screen and (max-width: 620px) {
+    #startGame {
+        font-size: 14px;
+    }
+}
+#losses {
+    margin-left: 3%;
 }
