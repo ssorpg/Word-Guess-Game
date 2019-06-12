@@ -10,9 +10,14 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
-<body>
+<body onkeyup="keyPressed(event, newGame)">
   <div class="container">
-    <button type="button" class="btn btn-primary btn-lg" id="startGame">Start the Game!</button>
+    <button type="button" class="btn btn-primary btn-lg" id="startGame" onclick="main()">Start the Game!</button>
+    <p></p>
+    <p id="lettersPressed"></p>
+    <p id="currentProgress"></p>
+    <p id="guessesRemaining"></p>
+    <p id="endGame"></p>
   </div>
 
   <script type="text/javascript" src="Assets/Javascript/game.js"></script>
