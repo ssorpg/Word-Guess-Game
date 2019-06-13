@@ -15,8 +15,13 @@ var newGame;
 var wins = 0;
 var losses = 0;
 
-var winSound = new Audio("../Sounds/y_d_d.mp3");
-var loseSound = new Audio("../Sounds/womp-womp.mp3");
+var winSound = new Audio("Assets/Sounds/y_d_d.mp3");
+var loseSound = new Audio("Assets/Sounds/womp-womp.mp3");
+
+winSound.volume = 0.2;
+loseSound.volume = 0.2;
+
+var lastWord; // Don't want to have the same word twice in a row
 
 class Game {
     constructor(gamePaused, lettersPressed, validLetters, possibleWords, currentWord, currentProgress, guessesRemaining, guessesUsed) {
@@ -31,18 +36,17 @@ class Game {
     }
 
     addKey(key) { // Add guessed letters
-        if (this.validLetters.indexOf(key) !== -1 && this.lettersPressed.indexOf(key) === -1) { // Valid letter and not found
+        if (this.validLetters.indexOf(key) !== -1 && this.lettersPressed.indexOf(key.toUpperCase()) === -1) { // Valid letter and not found
             this.lettersPressed.push(key.toUpperCase());
             // this.lettersPressed.sort(); // Doesn't look as good when it's sorted
             this.advanceCurrentProgress(key);
-            return;
-        }
-        else {
-            return;
         }
     }
     selectWord() { // Select a word to guess
-        this.currentWord = this.possibleWords[Math.floor(Math.random() * Math.floor(this.possibleWords.length))];
+        while (this.currentWord === lastWord || this.currentWord === undefined) { // Ensure we never get the same word twice, and the function will still run if we don't have a word yet
+            this.currentWord = this.possibleWords[Math.floor(Math.random() * Math.floor(this.possibleWords.length))];
+        }
+        lastWord = this.currentWord;
     }
     advanceCurrentProgress(key) { // Check if the pressed letter is part of the word
         let keyPositions = [];
@@ -92,17 +96,20 @@ function main() {
     let gamePaused = 0; // Default is game is not paused
     let lettersPressed = [];
     let validLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-    let possibleWords = ['boulder', 'fred', 'wilma', 'barney', 'caveman', 'stone', 'bedrock', 'flintstones'];
+    let possibleWords = ['boulder', 'fred', 'wilma', 'barney', 'cavemen', 'stone', 'bedrock', 'flintstones', 'pebble', 'rubble'];
     let currentWord;
     let currentProgress = [];
     let guessesRemaining = 12;
-    let guessesUsed = 0; // So we can just increment.
+    let guessesUsed = 0; // So we can just increment
 
     newGame = new Game(gamePaused, lettersPressed, validLetters, possibleWords, currentWord, currentProgress, guessesRemaining, guessesUsed);
+
+    document.body.addEventListener("keyup", function() { keyPressed(event) }); // addEventListener runs the function immediately and sets the output as the function to run
+
     initializeGame(newGame);
 }
 
-function initializeGame(newGame) { // Set a few elements and start calling functions
+function initializeGame() { // Set a few elements and start calling functions
     document.getElementById("startGame").textContent = "Restart";
     document.getElementById("endGame").textContent = "";
     newGame.selectWord();
@@ -115,7 +122,7 @@ function initializeGame(newGame) { // Set a few elements and start calling funct
     updatePage();
 }
 
-function keyPressed(event, newGame) { // Called when a key is pressed and sends the key to newGame
+function keyPressed(event) { // Called when a key is pressed and sends the key to newGame
     if (newGame.gamePaused === 1) { // Pauses the game
         return;
     }
